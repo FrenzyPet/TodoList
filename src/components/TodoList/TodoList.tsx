@@ -1,5 +1,6 @@
-import { FC, useRef, useState } from 'react';
+import { ChangeEvent, FC, KeyboardEventHandler, useState } from 'react';
 import { Task } from '../App/App';
+import { v1 } from 'uuid';
 
 interface Props {
   name: string
@@ -9,20 +10,42 @@ interface Props {
 const TodoList: FC<Props> = ({ name, tasks }) => {
   const [currentTasks, setTasks] = useState<Array<Task>>(tasks)
   const [filter, setFilter] = useState<string>('all')
+  const [taskName, setTaskName] = useState<string>('')
 
-  const handlerDeleteTask = (id: number) => {
+  const handlerDeleteTask = (id: string) => {
     const newTasks = currentTasks.filter(item => item.id !== id)
     setTasks(newTasks)
   }
-  const taskInput = useRef<HTMLInputElement | null>(null)
 
+  const handlerChangeTask = (evt: ChangeEvent<HTMLInputElement>) => {
+    setTaskName(evt.target.value)
+  }
+  
   const handlerAddTask = () => {
-    const task: Task = {
-      id: currentTasks.length + 1,
-      title: taskInput?.current?.value,
-      isDone: false,
+    if (taskName) {
+      const newTask: Task = {
+        id: v1(),
+        title: taskName,
+        isDone: false,
+      }
+      setTasks([...currentTasks, newTask])
+      setTaskName('')
     }
-    setTasks([...currentTasks, task])
+  }
+
+  const handlerAddTaskByEnter: KeyboardEventHandler<HTMLInputElement> = (evt) => {
+    if (taskName && evt.key === 'Enter') {
+      handlerAddTask()
+    }
+  }
+
+
+  const taskCompleteHandler = (id: string) => {
+    const currentTask = currentTasks.find(item => item.id === id)
+    if (currentTask) {
+      currentTask.isDone = !currentTask.isDone
+      setTasks([...currentTasks])
+    }
   }
 
   let filteredTasks = currentTasks
@@ -37,14 +60,18 @@ const TodoList: FC<Props> = ({ name, tasks }) => {
     <div>
       <h3>{name}</h3>
       <div>
-        <input ref={taskInput} type="text"/>
+        <input type="text"
+          value={taskName}
+          onChange={handlerChangeTask}
+          onKeyDown={handlerAddTaskByEnter}
+        />
         <button onClick={handlerAddTask}>+</button>
       </div>
       <ul>
         { filteredTasks.map(item => {
           return (
             <li key={item.id}>
-              <input type="checkbox" checked={item.isDone} onChange={() => 1}/>
+              <input type="checkbox" checked={item.isDone} onChange={() => taskCompleteHandler(item.id)}/>
               <span>{item.title}</span>
               <button onClick={() => handlerDeleteTask(item.id)}>X</button>
             </li>
