@@ -10,7 +10,7 @@
     "prefer-const": "warn",
     "indent": ["warn", 2],
     "comma-dangle": ["warn", {
-      "arrays": "never",
+      "arrays": "always-multiline",
       "objects": "always-multiline",
       "imports": "never",
       "exports": "never",
