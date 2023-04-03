@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import './App.scss';
 import TodoList from '../TodoList';
 import { v1 } from 'uuid';
+import style from './App.module.css'
 
 export interface Task {
   id: string
@@ -19,8 +20,8 @@ const App: FC = () =>  {
   ]
   
   return (
-    <div className="App">
-      <TodoList name="Заголовок" tasks={tasks}/>
+    <div className={style.app}>
+      <TodoList name="Todo List" tasks={tasks}/>
     </div>
   );
 }

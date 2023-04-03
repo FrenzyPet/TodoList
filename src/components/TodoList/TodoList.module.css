@@ -1,0 +1,61 @@
+.mainWrapper {
+  width: 500px;
+  padding: 20px;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+}
+
+.title {
+  text-align: center;
+  margin: 0;
+  margin-bottom: 20px;
+  font-size: 30px;
+}
+
+.tasksList {
+  margin-bottom: 30px;
+}
+
+.taskWrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.inputWrapper {
+  margin-bottom: 15px;
+}
+
+.checkbox {
+  flex-grow: 1;
+  font-size: 20px;
+  line-height: 20px;
+  transition: all 300ms;
+}
+
+.checkboxIsDone {
+  text-decoration: line-through;
+  color: rgba(253, 74, 74, 0.747);
+  opacity: 0.8;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button {
+  width: 100%;
+  height: auto;
+  padding: 10px;
+  font-size: 20px;
+  line-height: 20px;
+}
+
+.deleteButton {
+  width: 20px;
+  height: auto;
+}
+
+.error {
+  margin-bottom: 20px;
+}
