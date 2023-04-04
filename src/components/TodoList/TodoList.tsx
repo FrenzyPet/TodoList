@@ -1,8 +1,8 @@
-import { ChangeEvent, FC, KeyboardEventHandler, useState } from 'react';
 import { Space, Button, Input, Checkbox, List, Alert } from 'antd';
-import style from './TodoList.module.scss'
 import classnames from 'classnames';
-import { Filter, useTodos } from '../../store/store'
+import { ChangeEvent, FC, KeyboardEventHandler, useState } from 'react';
+import { Filters, useTodos } from '../../store/store'
+import style from './TodoList.module.scss'
 
 interface Props {
   name: string
@@ -31,8 +31,8 @@ const TodoList: FC<Props> = ({ name }) => {
       addTodo(taskName)
       setTaskName('')
     } else {
-      setTaskName('')
       setError('Field is required')
+      setTaskName('')
     }
   }
 
@@ -97,18 +97,18 @@ const TodoList: FC<Props> = ({ name }) => {
       />
       <Space.Compact className={style.buttonWrapper}>
         <Button
-          className={classnames({ [style.button]: true, [style.buttonActive]: filter === Filter.All })}
-          onClick={() => changeFilter(Filter.All)}
+          className={classnames({ [style.button]: true, [style.buttonActive]: filter === Filters.All })}
+          onClick={() => changeFilter(Filters.All)}
           type="primary"
         >All</Button>
         <Button
-          className={classnames({ [style.button]: true, [style.buttonActive]: filter === Filter.Active })}
-          onClick={() => changeFilter(Filter.Active)}
+          className={classnames({ [style.button]: true, [style.buttonActive]: filter === Filters.Active })}
+          onClick={() => changeFilter(Filters.Active)}
           type="primary"
         >Active</Button>
         <Button
-          className={classnames({ [style.button]: true, [style.buttonActive]: filter === Filter.Completed })}
-          onClick={() => changeFilter(Filter.Completed)}
+          className={classnames({ [style.button]: true, [style.buttonActive]: filter === Filters.Completed })}
+          onClick={() => changeFilter(Filters.Completed)}
           type="primary"
         >Completed</Button>
       </Space.Compact>

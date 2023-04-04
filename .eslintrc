@@ -15,6 +15,14 @@
       "imports": "never",
       "exports": "never",
       "functions": "never"
-  }]
+    }],
+    "no-debugger": "warn",
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
+        "alphabetize": { "order": "asc", "caseInsensitive": true }
+      }
+    ]
   }
 }
