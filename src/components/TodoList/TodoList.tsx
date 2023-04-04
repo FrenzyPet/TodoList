@@ -1,24 +1,25 @@
 import { ChangeEvent, FC, KeyboardEventHandler, useState } from 'react';
 import { Space, Button, Input, Checkbox, List, Alert } from 'antd';
-import { v1 } from 'uuid';
-import { Task } from '../App/App';
 import style from './TodoList.module.scss'
 import classnames from 'classnames';
+import { Filter, useTodos } from '../../store/store'
 
 interface Props {
   name: string
-  tasks: Array<Task>
 }
 
-const TodoList: FC<Props> = ({ name, tasks }) => {
-  const [currentTasks, setTasks] = useState<Array<Task>>(tasks)
-  const [filter, setFilter] = useState<string>('all')
+const TodoList: FC<Props> = ({ name }) => {
+  const tasks = useTodos(state => state.tasks)
+  const filter = useTodos(state => state.filter)
+  const addTodo = useTodos(state => state.addTodo)
+  const removeTodo = useTodos(state => state.removeTodo)
+  const changeTaskStatus = useTodos(state => state.changeTaskStatus)
+  const changeFilter = useTodos(state => state.changeFilter)
   const [taskName, setTaskName] = useState<string>('')
   const [error, setError] = useState<string>('')
 
   const handlerDeleteTask = (id: string) => {
-    const newTasks = currentTasks.filter(item => item.id !== id)
-    setTasks(newTasks)
+    removeTodo(id)
   }
 
   const handlerChangeTask = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -27,14 +28,10 @@ const TodoList: FC<Props> = ({ name, tasks }) => {
   
   const handlerAddTask = () => {
     if (taskName.trim()) {
-      const newTask: Task = {
-        id: v1(),
-        title: taskName,
-        isDone: false,
-      }
-      setTasks([...currentTasks, newTask])
+      addTodo(taskName)
       setTaskName('')
     } else {
+      setTaskName('')
       setError('Field is required')
     }
   }
@@ -47,19 +44,15 @@ const TodoList: FC<Props> = ({ name, tasks }) => {
   }
 
   const taskCompleteHandler = (id: string, isDone: boolean) => {
-    const currentTask = currentTasks.find(item => item.id === id)
-    if (currentTask) {
-      currentTask.isDone = isDone
-      setTasks([...currentTasks])
-    }
+    changeTaskStatus(id, isDone)
   }
 
-  let filteredTasks = currentTasks
+  let filteredTasks = tasks
   if (filter === 'completed') {
-    filteredTasks = currentTasks.filter(item => item.isDone)
+    filteredTasks = tasks.filter(item => item.isDone)
   }
   if (filter === 'active') {
-    filteredTasks = currentTasks.filter(item => !item.isDone)
+    filteredTasks = tasks.filter(item => !item.isDone)
   }
 
   return (
@@ -103,9 +96,21 @@ const TodoList: FC<Props> = ({ name, tasks }) => {
         )}
       />
       <Space.Compact className={style.buttonWrapper}>
-        <Button className={style.button} onClick={() => setFilter('all')} type="primary">All</Button>
-        <Button className={style.button} onClick={() => setFilter('active')} type="primary">Active</Button>
-        <Button className={style.button} onClick={() => setFilter('completed')} type="primary">Completed</Button>
+        <Button
+          className={classnames({ [style.button]: true, [style.buttonActive]: filter === Filter.All })}
+          onClick={() => changeFilter(Filter.All)}
+          type="primary"
+        >All</Button>
+        <Button
+          className={classnames({ [style.button]: true, [style.buttonActive]: filter === Filter.Active })}
+          onClick={() => changeFilter(Filter.Active)}
+          type="primary"
+        >Active</Button>
+        <Button
+          className={classnames({ [style.button]: true, [style.buttonActive]: filter === Filter.Completed })}
+          onClick={() => changeFilter(Filter.Completed)}
+          type="primary"
+        >Completed</Button>
       </Space.Compact>
     </div>
   );
