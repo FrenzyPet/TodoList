@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
-import './App.scss';
 import TodoList from '../TodoList';
 import { v1 } from 'uuid';
-import style from './App.module.css'
+import style from './App.module.scss'
 
 export interface Task {
   id: string

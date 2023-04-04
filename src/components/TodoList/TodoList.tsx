@@ -2,7 +2,7 @@ import { ChangeEvent, FC, KeyboardEventHandler, useState } from 'react';
 import { Space, Button, Input, Checkbox, List, Alert } from 'antd';
 import { v1 } from 'uuid';
 import { Task } from '../App/App';
-import style from './TodoList.module.css'
+import style from './TodoList.module.scss'
 import classnames from 'classnames';
 
 interface Props {
